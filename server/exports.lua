@@ -31,36 +31,25 @@ local function getJob(source, id)
 end
 
 local function hasJob(source, id, name, grade)
-    local id = tostring(id) 
-    local job = Jobs?[id]
-    if source and id ~= tostring(source) then 
-        local can = FW:GetData(source).group 
-        if config.allowedGroups[can] then       
-            if job then
-                for k, v in pairs(job) do
-                    if k == name then
-                        if grade then
-                            return k == name, grade == v.grade
-                        end
-                        return k == name, false
-                    end
-                end
-                return false, false
-            end
-            return false, false
-        end
-    end
-    if job then
-        for k, v in pairs(job) do
-            if k == name then
-                if grade then
-                    return k == name, grade == v.grade
-                end
-                return k == name, false
-            end
-        end
-        return false, false
-    end
+    local id = tostring(id) 
+    local job = Jobs?[id]
+    if source and id ~= tostring(source) then 
+        local can = FW:GetData(source).group 
+        if config.allowedGroups[can] then       
+            if job then
+                for k, v in pairs(job) do
+                    return k == name, grade == v.grade
+                end
+            end
+            return false, false
+        end
+    end
+    if job then
+        for k, v in pairs(job) do
+            return k == name, grade == v.grade
+        end 
+    end
+    return false, false
 end
 
 
