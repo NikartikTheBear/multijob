@@ -1,6 +1,7 @@
 
 local Query = require "server/modules/queries"
 local config = lib.load("shared/config")
+local fn = lib.load("server/functions")
 Jobs = {}
 
 
@@ -54,11 +55,8 @@ RegisterCommand("playerjobs", function(s)
     end
 end, false)
 
-
-
-
-AddEventHandler("playerJoined", function()
-    local source = tostring(source)
+AddEventHandler("multijob:server:playerLoaded", function(id)
+    local source = tostring(id)
     Query:loadJobs(source)
 end)
 
@@ -67,10 +65,12 @@ AddEventHandler("playerDropped", function()
     Query:saveJobs(source)
 end)
 
-AddEventHandler("onResourceStop", function()
-    for _, id in pairs(GetPlayers()) do
-        id = tostring(id)
-        Query:saveJobs(id)
+AddEventHandler("onResourceStop", function(res)
+    if res == GetCurrentResourceName() then
+        for _, id in pairs(GetPlayers()) do
+            id = tostring(id)
+            Query:saveJobs(id)
+        end
     end
 end)
 

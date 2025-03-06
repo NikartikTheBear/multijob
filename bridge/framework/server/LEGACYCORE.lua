@@ -1,6 +1,8 @@
 local fn = {}
 local LGF = exports["LEGACYCORE"]:GetCoreData()
-local Jobs = require '@LGF_Society.modules.server.jobs'
+local LgfJobs = require '@LGF_Society.modules.server.jobs'
+local config = lib.load("shared/config")
+local fn = lib.load("server/functions")
 
 function fn:GetPlayer(id)
     return LGF.DATA:GetPlayerDataBySlot(id)
@@ -24,14 +26,7 @@ function fn:GetJob(id)
 end
 
 function fn:SetJob(id, name, grade)
-    Jobs:SetPlayerJob(id, name, grade)
-    local job = self:GetJob(id)
-    TriggerEvent("multijob:server:onJobChange", id, {
-        name = job.name,
-        label = job.label,
-        grade = job.grade,
-        gradeLabel = job.gradeLabel
-    })
+    LgfJobs:SetPlayerJob(id, name, grade)
 end
 
 function fn:GetData(id)
@@ -44,5 +39,20 @@ function fn:GetData(id)
     }
 end
 
+AddEventHandler('LegacyCore:changeJob', function(id, jobName, jobGrade, currJob)
+    local player = tostring(id)
+    local jobs = Jobs?[player]
+    if (fn:countJobs(Jobs[player]) >= config.maxJobs) and not jobs[jobName] then fn:SetJob(player, currJob.JobName, currJob.JobGrade) return end
+    TriggerEvent("multijob:server:onJobChange", player, {
+        name = jobName,
+        label = jobName,
+        grade = jobGrade,
+        gradeLabel = jobGrade
+    })
+end)
+
+    AddEventHandler('LegacyCore:PlayerLoaded', function(slot, playerdata, new)
+        TriggerEvent("multijob:server:playerLoaded", playerdata.id)
+        end)
 
 return fn

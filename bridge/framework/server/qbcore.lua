@@ -44,6 +44,10 @@ function fn:GetData(id)
     }
 end
 
+AddEventHandler('QBCore:Server:PlayerLoaded', function(pObj)
+    TriggerEvent("multijob:server:playerLoaded", pObj.PlayerData.source)
+end)
+
 AddEventHandler('QBCore:Server:OnJobUpdate', function(source, job)
     TriggerEvent("multijob:server:onJobChange", source, {
         name = job.name,
