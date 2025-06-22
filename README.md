@@ -1,9 +1,16 @@
 # multijob
 Simple and lightweight multijob script for fivem built with ox-lib
 
-### Update
+### Update (1)
 - fixed jobs not saving
 - added max number of jobs
+
+### Update(2)
+- Added default job per request
+
+## Important
+if you wish to remove a job from the player menu in any other way other then "player self resigning" you must use either the admin menu or if you use another resource such as a boss menu you must add the removejob export listed below, otherwise the job will remain!
+
 
 ## Exports
 

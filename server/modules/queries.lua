@@ -13,7 +13,10 @@ function Query:loadJobs(s)
     local response = MySQL.query.await('SELECT `jobs` FROM `multijob` WHERE `id` = ?', {
         id
     })
-    if response and #response == 0 then self:createPlayer(id) end
+    if response and #response == 0 then 
+        self:createPlayer(id)
+        Jobs[s] = {unemployed = {gradeLabel = "Unemployed",grade = 0,label = "Unemployed"}}
+    end
     if response  and #response == 1 then
         for i = 1, #response do
             local row = response[i]
@@ -26,7 +29,7 @@ end
 
 function Query:createPlayer(id)
     MySQL.insert.await('INSERT INTO `multijob` (id, jobs) VALUES (?, ?)', {
-        id, json.encode({})
+         id, json.encode({unemployed = {gradeLabel = "Unemployed",grade = 0,label = "Unemployed"}})
     })
 end
 

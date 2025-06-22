@@ -76,10 +76,12 @@ end)
 
 --fallback
 CreateThread(function()
-    Wait(100)
-    Query:init()
-    for _, id in pairs(GetPlayers()) do
-        id = tostring(id)
-        Query:loadJobs(id)
+    if GetResourceState(GetCurrentResourceName()) == "started" then
+        Wait(100)
+        Query:init()
+        for _, id in pairs(GetPlayers()) do
+            id = tostring(id)
+            Query:loadJobs(id)
+        end
     end
 end)
